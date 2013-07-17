@@ -1,0 +1,103 @@
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+Installation instructions for the mod_IRCPrivs Gazelle PHP frontend.
+This goes on the user moderation page for admins to edit and use.
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+1) Add the propper field to the users_info DB table by running this SQL query:
+   	ALTER TABLE `users_info` ADD `IRCPrivs` ENUM( '0', '1', '2', '3' ) NOT NULL DEFAULT '0'
+
+-----------------------------------------------------------------------------
+2) Open sections/user/takemoderate.php
+
+-----------------------------------------------------------------------------
+3) Add these lines near the top of the file well after the line "// Variables for database input"
+	$IRCPrivs = (int)$_POST['IRCPrivs'];
+	$IRCP = array(0=>'None', 1=>'Voice', 2=>'HalfOp', 3=>'Oper');
+
+-----------------------------------------------------------------------------
+4) About 20 lines after the location of the two lines we added above, find the SQL query block and
+add the floowing line above any of the lines listed below.
+
+Add this: 
+	i.IRCPrivs,
+
+...above anyone of these lines:
+	i.AdminComment,
+	i.Donor,
+	i.Warned,
+	i.SupportFor,
+	DisableAvatar,
+
+-----------------------------------------------------------------------------
+5) Add the following lines:
+	if ($IRCPrivs!=$Cur['IRCPrivs'] && check_perms('admin_irc_privs')) {
+		$UpdateSet[]="IRCPrivs='$IRCPrivs'";
+		$EditSummary[]="IRC privs changed to ".$IRCP[$IRCPrivs];
+		$LightUpdates['IRCPrivs']=$IRCPrivs;
+	}
+
+...somwhere after this if-then statement:
+	if ($Title!=db_string($Cur['Title']) && check_perms('users_edit_titles')) {
+
+...AND somewhere before this one:
+	if ($Donor!=$Cur['Donor']  && check_perms('users_give_donor')) {
+
+-----------------------------------------------------------------------------
+6) Open sections/user/user.php
+
+-----------------------------------------------------------------------------
+7) Add the line to the first big SQL query:
+	i.IRCPrivs,
+
+...below any of the following lines (After line # 50):
+	i.DisableUpload,
+	i.DisableWiki,
+	i.DisablePM,
+	i.DisableIRC,
+	i.DisableRequests,
+
+-----------------------------------------------------------------------------
+8) In the list() statemnt directly underneath the SQL query, add '$IRCPrivs' to the list commands 
+args in the SAME ORDER AS THE SQL QUERY!!
+
+-----------------------------------------------------------------------------
+9) Add the following code directly before this line:
+	if (check_perms('users_promote_below', $Class) || check_perms('users_promote_to', $Class-1)) {
+
+...add this code:
+	if (check_perms('admin_irc_privs')) {
+?>
+			<tr>
+				<td class="label">IRC Privileges:</td>
+				<td>
+					<select name="IRCPrivs">
+						<option value="0" <? if($IRCPrivs==0 || $IRCPrivs=="") { echo 'selected="selected"'; }?>>None</option>
+						<option value="3" <? if($IRCPrivs==3) { echo 'selected="selected"'; }?>>Operator</option>
+						<option value="2" <? if($IRCPrivs==2) { echo 'selected="selected"'; }?>>Half-Operator</option>
+						<option value="1" <? if($IRCPrivs==1) { echo 'selected="selected"'; }?>>Voice</option>
+					</select>
+					<strong>NOTE: For high level staff, IRC privs are set by the IRC server.</strong>
+				</td>
+			</tr>
+<?
+	}
+
+-----------------------------------------------------------------------------
+10) Open classes/permissions_form.php and add this line:
+	'admin_irc_privs' => 'Can manage IRC privileges.',
+
+..in with all the similar 'admin_*' lines (in the first half of the file ONLY)
+
+-----------------------------------------------------------------------------
+11) Add this line:
+		<? display_perm('admin_irc_privs', 'Can manage IRC privileges.'); ?>
+
+...in the bottom half of the file amongnst similar looking 'admin_*' lines
+
+-----------------------------------------------------------------------------
+FINAL THOUGHTS:
+-Be sure to give your self permission to use IRCPrivs by configuring the permissions page.
+
+
+

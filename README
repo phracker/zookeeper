@@ -1,0 +1,138 @@
+*************************************************************************
+********************** ZooKeeper 1.97 - April 2011 **********************
+************************* Written By: eXploytIT *************************
+********************* Home: http://tbsf.me/zookeeper ********************
+*************************************************************************
+
+*************************************************************************
+** I. ABOUT *************************************************************
+
+ZooKeeper is an all-in-one IRC bot for Gazelle servers. It manages users,
+allows Gazelle to give feedback in IRC, and allows your bash/sh scripts
+to have IRC feedback capabilities too. ZooKeeper is written in python 
+using threading and MySQL libraries.
+
+*************************************************************************
+** II. FEATURES *********************************************************
+
+- Traditional Gazelle IRC server '/msg bot enter CHAN USER KEY' commands
+  but ZooKeeper can handle '/msg bot enter CHAN,CHAN2,CHAN3 USER KEY'
+
+- Automatically set the IRC username of the user that executes the 'enter'
+  command to that of their username in Gazelle. Do the same for the user's
+  host using the format USERNAME.USERCLASS.SITENAME
+
+- !user USERNAME: View basic stats of a user or yourself (yourself if no 
+  USERNAME val)
+
+- /msg bot enable USERNAME : Allows IRC operators to enable a user on the
+  site right from IRC (UNFINISHED!)
+
+- A listening socket that forwards all data to the IRC server though
+  ZooKeeper. This is used to make Gazelle and bash/sh scripts communicate
+  with the IRC server.
+
+- Automatically SAJOIN IRC operators to all channels when they join
+  the AdminChannel.
+
+- Convert HTTP site URLs to HTTPS sit URLs and vice-versa.
+
+- Automatically give HalfOp, Voice or ChanOp status to staff when they 
+  join any channel.
+
+- Kick non-staff from the staff channel
+
+- Added a Staff list clone called HighStaff for High-Level staff members
+  Only HighStaff can join the admin channel and run certain commands
+
+- Staff can enable a user on the Gazelle site through the bot. Useful for
+  help channel. USAGE: /msg ZooKeeper ENABLE [username]
+
+- Works with password protected channels.
+
+*************************************************************************
+** III. INSTALLING ******************************************************
+
+ZooKeeper depends on the following packages to run:
+  - python
+  - python-mysqldb
+  - netcat (for bash/sh script integration)
+
+There is really no installation procedure for ZooKeeper other than just
+copying the ZooKeeper directory to where you want it and then running:
+'chmod +x ZOOKEEPER_DIR/zookeeper.py' to make the scripts executable. 
+You will need to edit zookeeper.conf before you run the bot. I run 
+ZooKeeper in a screen like this (so I can see the debug output):
+  screen -S zookeeper ZOOKEEPER_DIR/zookeeper.py
+To close the screen terminal without killing ZooKeeper, press Ctrl+a+d.
+To go back to that screen terminal, run:
+  screen -R zookeeper
+
+NOTE: This is what the Oper tags line looks like for UnrealIRCd, these
+are the privs needed for ZooKeeper to work correctly!!
+   flags "AaNkKbB";
+
+*************************************************************************
+** IV. MODS *************************************************************
+
+--> mod_Greeting:
+mod_Greeting is a modification for ZooKeeper that checks if a user has
+an IRCGreeting when they join a channel, if they do, ZooKeeper send the
+greeting as a public message in that channel.
+You need to specify the DB table and field where the IRC greeting is kept
+for each user. For example, I use this in table 'users_info':
+  `IRCGreeting` mediumtext NOT NULL DEFAULT 'NONE'
+It is pretty simple to write some code to make the greeting editable from
+the user.php page.
+I created this mod as another perk to give out to higher donors on my 
+site. Yes, it would get annoying after a while, but it is harder to obtain
+than a custom title.
+
+--> mod_OnIRC:
+mod_OnIRC is a modification for ZooKeeper that watches for users to JOIN,
+PART, or QUIT the UserWatchChan and then updates a table in the Gazelle
+database with their current IRC online status. If they JOIN, it adds a
+record, PART or QUIT, it deletes the record.
+This could be used for IRC bonuses or an 'IRC Status' box on users profile
+pages.
+To use this mod, you have to add the following to your Gazelle MySQL db:
+CREATE TABLE IF NOT EXISTS `irc_online_users` (
+  `ID` int(15) NOT NULL,
+  `Username` varchar(75) NOT NULL,
+  `Nickname` varchar(75) NOT NULL,
+  `Joined` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  KEY `ID` (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--> mod_IRCPrivs
+mod_IRCPrivs is a modification for ZooKeeper that sets IRC privileges for
+users when they join any IRC channel that ZooKeeper is sitting in. This
+mod requires that this field be in the users_info DB table:
+  `IRCPrivs` ENUM( '0', '1', '2', '3' ) NOT NULL DEFAULT '0'
+The acceptable values for IRCPrivs are: '3', '2', '1', '0'
+Oper = 3, HolfOp = 2, Voice = 1, None = 0
+
+If mod_IRCPrivs is disabled, ZooKeeper will use the config file to
+determine the IRC privileges for a user.
+I will gladly help you out with the user.php and takemoderate.php code
+for this Mod. Find me in #gazelle or irc.copythatfloppy.org #zookepper
+NOTE: Read the included file 'install_module_frontends.txt' I am still
+working on making it easier to do, but these rough instructions should
+get you started.
+
+--> mod_StaffAssistAlerts
+This module will alert staff members via IRC PM and in the future, eMail.
+If a user enters the !help command in either the help, invites or disabled
+channels, staff will be alterted. Only HighStaff are alerted for the disabled
+channel. To prevent users from spamming staff and flooding them with PMs, a
+user can only execute the !help command 3 times every 24 hours. Please note
+that the original !help command is still the same as it was before when 
+executed in other channels.
+
+There is one setting that goes along with this module. mod_SAA_AlertLevel
+determines how staff is contacted by the bot. "1" = IRC PM, "2" = IRCPM and eMail.
+eMail is not operational yet and will be finished in the near future.
+
+*************************************************************************
+
+

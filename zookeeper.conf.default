@@ -1,0 +1,138 @@
+################################################################################################
+########################### ZooKeeper 1.x default configuration file ###########################    
+###############################      http://tbsf.me/zookeeper     ##############################
+##############################  Written By: eXploytIT - April 2011 ############################# 
+################################################################################################
+######### ALL settings are MANDITORY unless a defualt is given or marked as optional ###########
+################################################################################################
+
+# NOTE: If you wish not to set a config setting, just leave the value blank, a.k.a. ""
+# EXAMPLES:
+#    RIGHT: ConfigValue = 
+#	 WRONG: ConfigValue = ""
+#	 WRONG: #ConfigValue = 
+
+################################################################################################
+## Bot Settings ################################################################################
+################################################################################################
+
+# Change this to whatever you like
+# Be sure to register the bot's nick before running ZooKeeper for the first time!
+BotNick	= ZooKeeper 
+BotNickservPass	=  
+
+# IRC Server and Port
+IRCServer = localhost ## Default: localhost 
+IRCPort	= 6667 ## Default: 6667
+
+# IRC forwarder listening socket; host and port
+# This is how Gazelle communicates with IRC
+# Change these settings to match the SOCKET_LISTEN_PORT and SOCKET_LISTEN_ADDRESS in config.php
+ListenerHost = localhost ## Default: localhost
+ListenerPort = 31337 ## Default: 31337
+
+# It is very important that ZooKeeper has 'aA' OPER privledges
+OperUser = 
+OperPass = 
+
+#The force-join command for your IRCd, it is usually 'SAJOIN'
+sajoinCmd = SAJOIN ## Default: SAJOIN
+
+################################################################################################
+## Site Settings ###############################################################################
+################################################################################################
+
+# The tld of your site, no 'http' or 'www'. It should look just like the example
+SiteTLD	= yoursite.org
+# The name of your site
+SiteName = YourGazelleSite
+# The full base URL of your site, HTTPS and HTTP (must include the http(s) part)
+NonSSL_SiteURL = http://yoursite.org
+SSL_SiteURL = https://ssl.yoursite.org
+
+################################################################################################
+## Channel Settings ############################################################################
+################################################################################################
+
+# The channel where ZooKeeper defualts to and where it looks for Opers to join
+# This channel should probably be locked or access restricted somehow
+AdminChannel = #admin
+# If it is passworded, enter the password in the setting below. If no pass, set to ""
+AdminChannelPass = 
+
+# The staff channel
+StaffChan = #staff
+# List of channels ZooKeeper should join and monitor for user activity (Excluding the AdminChannel)
+Channels = #staff,#mainchannel,#help,#invite,#disabled,#announce
+# If a channel is passworded, type a space and enter the password after the channel name.
+# For Example: Channels = #staff password,#mainchannel password,#help,#disabled
+
+# The main channel, where all the users have access, this is where ZooKeeper will monitor JOINs and PARTs
+UserWatchChan = #mainchannel
+# Channel(s) where new uploads are announced
+AnnounceChan = #announce(,#announce2)
+# Channel where disabled users can ask for their account back. If none, just set to ""
+DisabledChan = #disabled
+# Channel where non-members can ask for, and interview for, an invite to the site. If no invites chan just set to ""
+InvitesChan = #invites
+# Channel where users can ask for help with site related matters.If no help chan just set to ""
+HelpChan = #help
+
+################################################################################################
+## Privilege Settings ##########################################################################
+################################################################################################
+
+# HighStaff is a comma separated list of the users that are high-level staff (can access the admin channel)
+HighStaff = user,anothernick,john
+# Staff is a comma separated list of the users that are staff (can access the staff channel)
+Staff = user,anothernick,john
+
+# NOTE: The following PermIDs override the staff lists above. If you wish to use the above lists
+# to determine staff members, then set the following values to 0
+
+# The minimum staff permission ID for Gazelle. Users with perm IDs higher that this will be treated as staff too.
+# NOTE: The PermissionID's for user classes can be found in tools.php?action=permissions  DO NOT use 
+# the class level #'s found in config.php
+MinStaffPermID = 600
+# The lowest permission ID considered to be High Staff (Admins. SysOP, Devs, etc..)
+HighStaffPermID = 900
+
+# Opers is a comma separated list of the nicks that are made Oper in channels
+Opers = user,anothernick,john ## Ignored if mod_IRCPrivs is enabled
+# Voiced is a comma separated list of the users are give voice upon identifying
+Voiced = user,anotheruser,john ## Ignored if mod_IRCPrivs is enabled
+# HalfOps is a comma separated list of the users are give HalfOp upon identifying
+HalfOps = user,anotheruser,john ## Ignored if mod_IRCPrivs is enabled
+
+################################################################################################
+## MySQL Settings ##############################################################################
+################################################################################################
+
+# These should match the settings in config.php
+MySQL_host =  
+MySQL_user =  
+MySQL_passwd = 
+MySQL_db = 
+
+################################################################################################
+## Module Settings #############################################################################
+################################################################################################
+
+# mod_Greeting: Send a user specified IRC greeting when the user joins a channel
+# Enable mod_Greeting
+mod_Greeting = FALSE ## Default: FALSE, Enable: TRUE
+
+# mod_OnIRC: Keep track of users currently on IRC by upadting a table in the Gazelle database
+# Enable mod_OnINC
+mod_OnIRC = FALSE ## Default: FALSE, Enable: TRUE
+
+# mod_IRCPrivs: Automatically give users IRC privileges according to DB values
+# Enable IRCPrivs
+mod_IRCPrivs = FALSE ## Default: FALSE, Enable: TRUE
+
+# mod_StaffAssistAlerts: Alert staff members when a user needs assistance in the invites, disabled or help
+# channels. When a user sends the "!help" command in those channels, staff will be alerted via PM or eMail
+# NOTE: eMail is not operational yet
+mod_StaffAssistAlerts = FALSE ## Default: FALSE, Enable: TRUE
+mod_SAA_AlertLevel = 1 ## 1 = IRC PM, 2 = IRC PM and eMail Default = 1
+

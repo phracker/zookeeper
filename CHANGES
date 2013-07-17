@@ -1,0 +1,90 @@
+-> November 29th, 2010 - Version 1.1
+-Added MySQL injection protection
+-Wrote some error catching code to make it more idiot proof.
+
+-> December 1st, 2010 - Version 1.12
+-Fixed (hopefully) database timeout bug
+-Fix some other small and minor bugs and typos
+
+-> December 2nd, 2010 - Version 1.3
+-Fixed Injection detection code to work with lists too
+-Can accept user classes with a space in the name (removes the space)
+-Fixed a few typos
+-Found and fixed some MySQL errors
+-Trimmed down some bulky string handling code
+
+-> December 4th, 2010 - Version 1.5
+-Fixed change host/user when identifying with the bot
+-Fixed some error catching bugs
+-Added Site URL conversion
+-Removed unnessecary injection protection commands
+-Fixed username bug
+
+-> December 5th, 2010 - Version 1.6
+-Implemented MySQL class to prevent MySQL server timeouts
+-Changed user host/ident format to UserID@Username.Class.SitrURL
+-Cleaned up variables and function code
+-Added on_kick handling function
+-Added checkOnIRC to verify all online users
+-OnIRC now supports kick and nick commands
+-Added cofigure module for config file
+
+-> December 31st, 2010 - Version 1.7
+-Fixed CHGIDENT and CHGHOST commands
+-Fixed MySQL bug in getUserInfo()
+-Added auto voice for specified users
+-Added auto halfop for specified users
+
+-> January 5th, 2011 - Version 1.8
+-Fixed some bugs
+-Added UL/DL/RATIO to !user command
+-Added auto Oper when user joins channel
+-Kick non-staff from staff channel
+
+-> January 16th, 2011 - Version 1.85
+-Changed IRCGreeting Title
+-Changed !help message
+
+-> January 30th, 2011 - Version 1.90
+-Added settings for modules
+-No IRCGreeting in announce chan(s)
+-Added an !sandwich command to give a user a sandwich
+-Made IRCPrivs numeric instead of a string value
+
+-> January 31th, 2011 - Version 1.91
+-Added Auto-updates
+
+-> February 23rd, 2011 - Version 1.93
+-Fixed mod_IRCPrivs
+-Cleaned up some unused code
+-Strengthened SQLi protection
+-Removed customizable module DB table/fields
+-Promt user to ask if they want to update ZooKeeper
+-Look at the DB for permission level to determine if user is staff
+
+-> March 28th, 2011 - Version 1.94
+-Cleaned up code
+-Streamlined/formatted code
+-Added some more debugging output
+-Made debugging output neater
+-Don't run any user functions/mods for the bot's username
+-Fixed enable user function
+
+-> March 31st, 2011 - Version 1.95
+-Fixed a bug in on_kick and on_nick
+
+-> April 21st, 2011 - Version 1.96
+-Added support for password protected channels
+-Fixed a bug that would allow disabled users to still join +i channels
+-Added DisabledChan config setting for handling disabled users
+-Added a module that will alert staffers via IRC PM or eMail when a user needs help
+  in the invites, disabled or help channels (if enabled).
+-Fixed annoying update bug
+-Added a limit for the number of times a user can use the !help command to 
+  get staff's attention. 3times/24Hr
+
+-> April 24th, 2011 - Version 1.97
+-Fixed a bug allowing anyone to join AdminChannel
+-Fixed a bug that caused a crash when a user was kicked or changed their nick
+-Add 'Forum Posts' to !user command
+
