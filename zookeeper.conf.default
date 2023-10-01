@@ -110,6 +110,7 @@ HalfOps = user,anotheruser,john ## Ignored if mod_IRCPrivs is enabled
 
 # These should match the settings in config.php
 MySQL_host =  
+MySQL_port =  
 MySQL_user =  
 MySQL_passwd = 
 MySQL_db = 

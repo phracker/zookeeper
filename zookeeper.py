@@ -36,6 +36,7 @@ config = shelve.open(".config")
 Channels = config["Channels"].split(",")
 AnnounceChans = config["AnnounceChan"].split(",")
 MySQL_host = config["MySQL_host"]
+MySQL_port = int(config["MySQL_port"])
 MySQL_user = config["MySQL_user"]
 MySQL_passwd = config["MySQL_passwd"]
 MySQL_db = config["MySQL_db"]
@@ -94,7 +95,7 @@ class mysql:
     def __init__(self):
 	self.running = True;
 	try:
-    	    self.sql = MySQLdb.connect(host = MySQL_host, user = MySQL_user, passwd = MySQL_passwd, db = MySQL_db, reconnect = 1)
+    	    self.sql = MySQLdb.connect(host = MySQL_host, port = MySQL_port, user = MySQL_user, passwd = MySQL_passwd, db = MySQL_db, reconnect = 1)
 	except MySQLdb.Error, e:
 	    self.running = True;
     	    print "*** MySQL Error %d: %s ***" % (e.args[0], e.args[1])
