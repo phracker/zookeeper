@@ -286,6 +286,23 @@ def configure(rehash="NO"):
                         if rehash == "NO":
                             print "*** FATAL: quitting ***"
                         return "Error"
+            elif option == "MySQL_port":
+                if "MySQL_port" in defined:
+                    print "*** CONFIG PARSE ERROR ON LINE " + str(linenumber) + " ***"
+                    print "*** MySQL_port already defined, using earlier definition ***"
+                else:
+                    try:
+                        MPort = line.strip().split("=")[1].strip().split("##")[0].strip()
+			if MPort == "":
+			    print "*** CONFIG PARSE ERROR ON LINE " + str(linenumber) + " ***"
+                            print "*** No arguments for option MySQL_port, using default (3306) ***"
+                            defined["MySQL_port"] = "3306"
+			else:
+			    defined["MySQL_port"] = MPort
+                    except IndexError:
+                        print "*** CONFIG PARSE ERROR ON LINE " + str(linenumber) + " ***"
+                        print "*** No arguments for option MySQL_port, using default (3306) ***"
+                        defined["MySQL_port"] = "3306"
             elif option == "MySQL_passwd":
                 if "MySQL_passwd" in defined:
                     print "*** CONFIG PARSE ERROR ON LINE " + str(linenumber) + " ***"
